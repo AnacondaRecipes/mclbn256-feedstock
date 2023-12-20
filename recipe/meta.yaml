@@ -1,0 +1,59 @@
+{% set name = "mclbn256" %}
+{% set version = "1.3.5" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/nthparty/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 2087e21a431d49673f8d0bff5e1b6d073ec7e98c3c9ffa4e3fd18c8ec9068f74
+  patches:
+    - 0001-change-loadlibrary-path.patch
+
+build:
+  skip: True  # [s390x or py<37]
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+
+requirements:
+  build:
+    - patch  # [not win]
+    - m2-patch  # [win]
+  host:
+    - python
+    - pip
+    - setuptools
+    - wheel
+  run:
+    - python
+    - mcl
+
+test:
+  imports:
+    - mclbn256
+  requires:
+    - pip
+  commands:
+    - pip check
+
+
+ 
+about:
+  home: https://github.com/nthparty/mclbn256
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE
+  summary: Python library that serves as an API for the BN254/256 pairing-friendly curve implemented in MCl in C.
+  description: |
+    BN-256 was an old name for the Barreto–Naehrig(2,254) Weierstrass curve, when it was though to have close 
+    to 256 bits of security. It has since been estimated to have at least 90 bits of security (compared to symmetric ciphers) 
+    and is now more commonly refered to by BN254, after the number of bits in its prime modulus. 
+    Specifically, mclbn256 is the name of the subset of the MCl library containing the support for this curve.
+
+  doc_url: https://github.com/nthparty/mclbn256
+  dev_url: https://github.com/nthparty/mclbn256
+
+extra:
+  recipe-maintainers:
+    - M-Waszkiewicz-Anaconda
