@@ -36,6 +36,7 @@ test:
     - pip
   commands:
     - pip check
+    - python -c "import mclbn256; mclbn256.mclbn256.assert_bilinearity(); mclbn256.mclbn256.assert_serializable(); print('pass')"
 
 
  
